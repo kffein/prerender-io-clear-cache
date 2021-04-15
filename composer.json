@@ -1,0 +1,49 @@
+{
+    "name": "kffein/prerender-io-clear-cache",
+    "description": "Clear the cache on entries save from prerender.io",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "prerender io clear cache"
+    ],
+    "support": {
+        "docs": "???",
+        "issues": "???"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kffein",
+            "homepage": "https://kffein.com"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.0.0"
+    },
+    "require-dev": {
+      "craftcms/cms": "^3.2.0",
+      "codeception/codeception": "^3.0",
+      "vlucas/phpdotenv": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+          "kffein\\prerenderioclearcache\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Prerender Io Clear Cache",
+        "handle": "prerender-io-clear-cache",
+        "developer": "Kffein",
+        "developerUrl": "https://kffein.com",
+        "documentationUrl": "???",
+        "changelogUrl": "???",
+        "components": {
+            "prerenderIoClearCacheService": "kffein\\prerenderioclearcache\\services\\PrerenderIoClearCacheService"
+        },
+        "class": "kffein\\prerenderioclearcache\\PrerenderIoClearCache"
+    }
+}

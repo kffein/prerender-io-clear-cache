@@ -1,0 +1,39 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Prerender Io Clear Cache plugin for Craft CMS 3.x
+ *
+ * Prerender Io Clear Cache Settings.twig
+ *
+ * @author    Kffein
+ * @copyright Copyright (c) 2021 Kffein
+ * @link      https://kffein.com
+ * @package   PrerenderIoClearCache
+ * @since     1.0.0
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+<h1>{{ 'settings__title'|t('prerender-io-clear-cache') }}</h1>
+{{ 
+    forms.textField(
+    {
+        label: 'Prerender.io token',
+        instructions: 'settings__prerender_token__instructions'|t('prerender-io-clear-cache'),
+        id: 'prerenderToken',
+        name: 'prerenderToken',
+        value: settings['prerenderToken']
+    })
+}}
+{% set label = 'Clear Cache On Save?'|t('prerender-io-clear-cache') %}
+{{
+    forms.lightswitchField(
+    {
+        label: "settings__clear_cache_on_save__label"|t('prerender-io-clear-cache'),
+        instructions: 'settings__clear_cache_on_save__instructions'|t('prerender-io-clear-cache'),
+        id: 'clearCacheOnSave',
+        name: 'clearCacheOnSave',
+        on: settings['clearCacheOnSave'],
+    })
+}}

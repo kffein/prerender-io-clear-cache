@@ -1,0 +1,20 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Prerender Io Clear Cache plugin for Craft CMS
+ *
+ * PrerenderIoClearCacheUtility Utility Content
+ *
+ * @author    Kffein
+ * @copyright Copyright (c) 2021 Kffein
+ * @link      https://kffein.com
+ * @package   PrerenderIoClearCache
+ * @since     1.0.0
+ */
+#}
+
+<h1>Prerender.io</h1>
+
+{% set iconUrl = view.getAssetManager().getPublishedUrl('@kffein/prerenderioclearcache/assetbundles/prerenderioclearcacheutilityutility/dist', true) ~ '/img/PrerenderIoClearCacheUtility-icon.svg' %}
+
+<a class="btn" href="{{ actionUrl('prerender-io-clear-cache/default/clearallcache') }}">{{ 'utilities__button'|t('prerender-io-clear-cache') }}</a>

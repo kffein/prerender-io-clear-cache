@@ -1,0 +1,26 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Prerender Io Clear Cache plugin for Craft CMS
+ *
+ * PrerenderIoClearCacheField Field Settings
+ *
+ * @author    Kffein
+ * @copyright Copyright (c) 2021 Kffein
+ * @link      https://kffein.com
+ * @package   PrerenderIoClearCache
+ * @since     1.0.0
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+{% do view.registerAssetBundle("kffein\\prerenderioclearcache\\assetbundles\\prerenderioclearcache\\PrerenderIoClearCacheAsset") %}
+
+{{ forms.textField({
+    label: 'Some Attribute',
+    instructions: 'Enter some attribute here.',
+    id: 'someAttribute',
+    name: 'someAttribute',
+    value: field['someAttribute']})
+}}

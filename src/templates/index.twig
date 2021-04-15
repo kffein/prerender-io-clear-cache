@@ -1,0 +1,47 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Prerender Io Clear Cache plugin for Craft CMS 3.x
+ *
+ * Prerender Io Clear Cache index.twig
+ *
+ * @author    Kffein
+ * @copyright Copyright (c) 2021 Kffein
+ * @link      https://kffein.com
+ * @package   PrerenderIoClearCache
+ * @since     1.0.0
+ */
+#}
+
+{% extends "_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+
+{% do view.registerAssetBundle("kffein\\prerenderioclearcache\\assetbundles\\prerenderioclearcache\\PrerenderIoClearCacheAsset") %}
+{% do view.registerAssetBundle("kffein\\prerenderioclearcache\\assetbundles\\indexcpsection\\IndexCPSectionAsset") %}
+
+{# Link for the ? icon at the bottom of the page #}
+{% set docsUrl = "???" %}
+
+{# The title of this CP section #}
+{% set title = "Prerender Io Clear Cache" %}
+
+{# The URL to this plugin's base CP section #}
+{% set pluginCpUrl = url('prerender-io-clear-cache') %}
+
+{# Get a URL to an image in our AssetBundle #}
+{% set iconUrl = view.getAssetManager().getPublishedUrl('@kffein/prerenderioclearcache/assetbundles/indexcpsection/dist', true) ~ '/img/Index-icon.svg' %}
+
+{# Content that should appear in the page header#}
+{% set extraPageHeaderHtml %}
+    <div class="buttons">
+        <a href="{{ pluginCpUrl }}" class="btn submit add icon">{{ "Click Me!"|t('prerender-io-clear-cache') }}</a>
+    </div>
+{% endset %}
+
+{# The content of the CP Section#}
+{% set content %}
+    <h2>{{ "Index CP Section body gaoes here"|t('prerender-io-clear-cache') }}</h2>
+    <img src="{{ iconUrl }}" height="64" width="64" />
+    <p class="textline">
+    
+{% endset %}
