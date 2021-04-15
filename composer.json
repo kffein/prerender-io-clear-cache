@@ -11,8 +11,8 @@
         "prerender io clear cache"
     ],
     "support": {
-        "docs": "???",
-        "issues": "???"
+        "docs": "https://github.com/kffein/prerender-io-clear-cache",
+        "issues": "https://github.com/kffein/prerender-io-clear-cache/issues"
     },
     "license": "MIT",
     "authors": [
@@ -39,8 +39,6 @@
         "handle": "prerender-io-clear-cache",
         "developer": "Kffein",
         "developerUrl": "https://kffein.com",
-        "documentationUrl": "???",
-        "changelogUrl": "???",
         "components": {
             "prerenderIoClearCacheService": "kffein\\prerenderioclearcache\\services\\PrerenderIoClearCacheService"
         },
