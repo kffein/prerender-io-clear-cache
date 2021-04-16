@@ -25,5 +25,6 @@ return [
     'settings__clear_cache_on_save__label' => 'Clear Cache On Save?',
     'settings__clear_cache_on_save__instructions' => 'Do you want to clear the cache of an entry on save?',
     'settings__prerender_token__instructions' => 'Enter the token from Prerender.io here.',
-    'utilities__button' => 'Clear all cache'
+    'utilities__button' => 'Clear all cache',
+    'added-to-queue-success' => 'Clear all cache added to queue with success'
 ];

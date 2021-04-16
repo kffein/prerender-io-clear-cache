@@ -13,6 +13,7 @@ namespace kffein\prerenderioclearcache\controllers;
 use craft\web\Controller;
 use kffein\prerenderioclearcache\jobs\PrerenderIoClearCacheAll;
 use craft\helpers\Queue;
+use Craft;
 
 /**
  * Default Controller
@@ -36,7 +37,6 @@ use craft\helpers\Queue;
  */
 class DefaultController extends Controller
 {
-
     // Protected Properties
     // =========================================================================
 
@@ -52,7 +52,8 @@ class DefaultController extends Controller
 
     public function actionClearallcache()
     {
-        Queue::push(new PrerenderIoClearCacheAll(), 10);
+        Queue::push(new PrerenderIoClearCacheAll());
+        Craft::$app->getSession()->setNotice(Craft::t('prerender-io-clear-cache', 'added-to-queue-success'));
         return $this->redirect('/admin');
     }
 }

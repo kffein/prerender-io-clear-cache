@@ -11,27 +11,17 @@
 namespace kffein\prerenderioclearcache;
 
 use kffein\prerenderioclearcache\services\PrerenderIoClearCacheService as PrerenderIoClearCacheServiceService;
-use kffein\prerenderioclearcache\variables\PrerenderIoClearCacheVariable;
+use kffein\prerenderioclearcache\services\PrerenderService;
 use kffein\prerenderioclearcache\twigextensions\PrerenderIoClearCacheTwigExtension;
 use kffein\prerenderioclearcache\models\Settings;
-use kffein\prerenderioclearcache\fields\PrerenderIoClearCacheField as PrerenderIoClearCacheFieldField;
 use kffein\prerenderioclearcache\utilities\PrerenderIoClearCacheUtility as PrerenderIoClearCacheUtilityUtility;
-use kffein\prerenderioclearcache\widgets\PrerenderIoClearCacheWidget as PrerenderIoClearCacheWidgetWidget;
-
 use Craft;
 use craft\base\Plugin;
 use craft\services\Plugins;
-use craft\events\PluginEvent;
 use craft\console\Application as ConsoleApplication;
-use craft\web\UrlManager;
 use craft\services\Elements;
-use craft\services\Fields;
 use craft\services\Utilities;
-use craft\web\twig\variables\CraftVariable;
-use craft\services\Dashboard;
 use craft\events\RegisterComponentTypesEvent;
-use craft\events\RegisterUrlRulesEvent;
-
 use yii\base\Event;
 
 /**
@@ -49,6 +39,7 @@ use yii\base\Event;
  * @since     1.0.0
  *
  * @property  PrerenderIoClearCacheServiceService $prerenderIoClearCacheService
+ * @property PrerenderService
  * @property  Settings $settings
  * @method    Settings getSettings()
  */
@@ -116,32 +107,6 @@ class PrerenderIoClearCache extends Plugin
             $this->controllerNamespace = 'kffein\prerenderioclearcache\console\controllers';
         }
 
-        // Register our site routes
-        Event::on(
-            UrlManager::class,
-            UrlManager::EVENT_REGISTER_SITE_URL_RULES,
-            function (RegisterUrlRulesEvent $event) {
-                $event->rules['siteActionTrigger1'] = 'prerender-io-clear-cache/default';
-            }
-        );
-
-        // // Register our CP routes
-        Event::on(
-            UrlManager::class,
-            UrlManager::EVENT_REGISTER_CP_URL_RULES,
-            function (RegisterUrlRulesEvent $event) {
-                $event->rules['cpActionTrigger1'] = 'prerender-io-clear-cache/default/do-something';
-            }
-        );
-
-        // Register our elements
-        // Event::on(
-        //     Elements::class,
-        //     Elements::EVENT_REGISTER_ELEMENT_TYPES,
-        //     function (RegisterComponentTypesEvent $event) {
-        //     }
-        // );
-
         // Register our utilities
         Event::on(
             Utilities::class,
@@ -151,36 +116,47 @@ class PrerenderIoClearCache extends Plugin
             }
         );
 
-        // Clear cache on entry save 
+        // Clear cache on entry save
         Event::on(
             Elements::class,
             Elements::EVENT_AFTER_SAVE_ELEMENT,
             function (Event $event) {
-                $object = $event->element;
-                if(get_class($object) == 'craft\elements\Entry') {
-                    PrerenderIoClearCache::$plugin->prerenderIoClearCacheService->clearCache([$object->url]);
+                $element = $event->element;
+
+                if (get_class($element) !== 'craft\elements\Entry') {
+                    return;
                 }
+
+                if (!strlen($element->url)) {
+                    return;
+                }
+
+                if ($element->isDraft) {
+                    return;
+                }
+
+                PrerenderIoClearCache::$plugin->prerenderIoClearCacheService->clearCache([$element->url]);
             }
         );
 
-/**
- * Logging in Craft involves using one of the following methods:
- *
- * Craft::trace(): record a message to trace how a piece of code runs. This is mainly for development use.
- * Craft::info(): record a message that conveys some useful information.
- * Craft::warning(): record a warning message that indicates something unexpected has happened.
- * Craft::error(): record a fatal error that should be investigated as soon as possible.
- *
- * Unless `devMode` is on, only Craft::warning() & Craft::error() will log to `craft/storage/logs/web.log`
- *
- * It's recommended that you pass in the magic constant `__METHOD__` as the second parameter, which sets
- * the category to the method (prefixed with the fully qualified class name) where the constant appears.
- *
- * To enable the Yii debug toolbar, go to your user account in the AdminCP and check the
- * [] Show the debug toolbar on the front end & [] Show the debug toolbar on the Control Panel
- *
- * http://www.yiiframework.com/doc-2.0/guide-runtime-logging.html
- */
+        /**
+         * Logging in Craft involves using one of the following methods:
+         *
+         * Craft::trace(): record a message to trace how a piece of code runs. This is mainly for development use.
+         * Craft::info(): record a message that conveys some useful information.
+         * Craft::warning(): record a warning message that indicates something unexpected has happened.
+         * Craft::error(): record a fatal error that should be investigated as soon as possible.
+         *
+         * Unless `devMode` is on, only Craft::warning() & Craft::error() will log to `craft/storage/logs/web.log`
+         *
+         * It's recommended that you pass in the magic constant `__METHOD__` as the second parameter, which sets
+         * the category to the method (prefixed with the fully qualified class name) where the constant appears.
+         *
+         * To enable the Yii debug toolbar, go to your user account in the AdminCP and check the
+         * [] Show the debug toolbar on the front end & [] Show the debug toolbar on the Control Panel
+         *
+         * http://www.yiiframework.com/doc-2.0/guide-runtime-logging.html
+         */
         Craft::info(
             Craft::t(
                 'prerender-io-clear-cache',

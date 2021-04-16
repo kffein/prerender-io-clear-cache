@@ -11,11 +11,9 @@
 namespace kffein\prerenderioclearcache\services;
 
 use kffein\prerenderioclearcache\PrerenderIoClearCache;
-
-use Craft;
 use craft\base\Component;
-use craft\elements\Entry;
 use kffein\prerenderioclearcache\PrerenderioClearCache as PrerenderioclearcachePrerenderioClearCache;
+use craft\elements\Entry;
 
 /**
  * PrerenderIoClearCacheService Service
@@ -32,24 +30,45 @@ use kffein\prerenderioclearcache\PrerenderioClearCache as PrerenderioclearcacheP
  */
 class PrerenderIoClearCacheService extends Component
 {
+    // Constant Properties
+    // =========================================================================
+    const URL_CHUNK_LIMIT = 1000;
+
     // Public Methods
     // =========================================================================
     public function clearCache(array $urls) : void
     {
         $token = PrerenderioclearcachePrerenderioClearCache::$plugin->getSettings()->prerenderToken;
+
+        if (!strlen($token)) {
+            throw new \Exception('Token is invalid');
+        }
+
         $ch = curl_init('https://api.prerender.io/recache');
-        $key = count($urls) == 1 ? 'url' : 'urls';
         curl_setopt_array($ch, [
-            CURLOPT_POST => TRUE,
-            CURLOPT_RETURNTRANSFER => TRUE,
+            CURLOPT_POST => true,
+            CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HTTPHEADER => [
                 'Content-Type: application/json'
             ],
             CURLOPT_POSTFIELDS => json_encode([
                 'prerenderToken' => $token,
-                $key => $urls,
+                'urls' => $urls,
             ])
         ]);
         curl_exec($ch);
+    }
+
+    public function clearEntriesCache()
+    {
+        $entries = Entry::find()->siteId('*')->all();
+        $urls = array_filter(array_map(function ($entry) {
+            return $entry->url;
+        }, $entries));
+
+        $urlsChunks = array_chunk($urls, self::URL_CHUNK_LIMIT);
+        foreach ($urlsChunks as $urls) {
+            $this->clearCache($urls);
+        }
     }
 }

@@ -11,10 +11,8 @@
 namespace kffein\prerenderioclearcache\jobs;
 
 use kffein\prerenderioclearcache\PrerenderIoClearCache;
-
 use Craft;
 use craft\queue\BaseJob;
-use craft\elements\Entry;
 
 /**
  * PrerenderIoClearCacheTask job
@@ -51,32 +49,12 @@ class PrerenderIoClearCacheAll extends BaseJob
     // Public Properties
     // =========================================================================
 
-
     // Public Methods
     // =========================================================================
 
     public function execute($queue)
     {
-        $siteIds = \Craft::$app->getSites()->allSiteIds;
-        $totalSites = count($siteIds);
-        foreach($siteIds as $siteId) {
-            $entries = Entry::find()->siteId($siteId)->all();
-            $urlsChunks = array_chunk(
-                array_column($entries, 'url'), 
-                1000
-            );
-            foreach($urlsChunks as $i => $urls) {
-                PrerenderIoClearCache::$plugin->prerenderIoClearCacheService->clearCache($urls);    
-            }    
-            $this->setProgress(
-                $queue,
-                $i / $totalSites,
-                \Craft::t('app', '{step, number} of {total, number}', [
-                    'step' => $i + 1,
-                    'total' => $totalSites,
-                ])
-            );
-        }
+        PrerenderIoClearCache::$plugin->prerenderIoClearCacheService->clearEntriesCache();
     }
 
     // Protected Methods
