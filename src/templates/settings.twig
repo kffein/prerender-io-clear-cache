@@ -17,13 +17,14 @@
 
 <h1>{{ 'settings__title'|t('prerender-io-clear-cache') }}</h1>
 {{ 
-    forms.textField(
+    forms.autosuggestField(
     {
         label: 'Prerender.io token',
         instructions: 'settings__prerender_token__instructions'|t('prerender-io-clear-cache'),
         id: 'prerenderToken',
         name: 'prerenderToken',
-        value: settings['prerenderToken']
+        value: settings['prerenderToken'],
+        suggestEnvVars: true
     })
 }}
 {% set label = 'Clear Cache On Save?'|t('prerender-io-clear-cache') %}
