@@ -135,6 +135,11 @@ class PrerenderIoClearCache extends Plugin
                     return;
                 }
 
+                $clearCacheOnSave = PrerenderIoClearCache::$plugin->getSettings()->clearCacheOnSave;
+                if (!$clearCacheOnSave) {
+                    return;
+                }
+
                 PrerenderIoClearCache::$plugin->prerenderIoClearCacheService->clearCache([$element->url]);
             }
         );
