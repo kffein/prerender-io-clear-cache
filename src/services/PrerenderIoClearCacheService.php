@@ -14,6 +14,7 @@ use kffein\prerenderioclearcache\PrerenderIoClearCache;
 use craft\base\Component;
 use kffein\prerenderioclearcache\PrerenderioClearCache as PrerenderioclearcachePrerenderioClearCache;
 use craft\elements\Entry;
+use Craft;
 
 /**
  * PrerenderIoClearCacheService Service
@@ -38,7 +39,7 @@ class PrerenderIoClearCacheService extends Component
     // =========================================================================
     public function clearCache(array $urls) : void
     {
-        $token = PrerenderioclearcachePrerenderioClearCache::$plugin->getSettings()->prerenderToken;
+        $token = Craft::parseEnv(PrerenderioclearcachePrerenderioClearCache::$plugin->getSettings()->prerenderToken);
 
         if (!strlen($token)) {
             throw new \Exception('Token is invalid');
@@ -61,10 +62,11 @@ class PrerenderIoClearCacheService extends Component
 
     public function clearEntriesCache()
     {
-        $entries = Entry::find()->siteId('*')->all();
+        $entries = Entry::find()->siteId('*')->limit(null)->all();
         $urls = array_filter(array_map(function ($entry) {
             return $entry->url;
         }, $entries));
+        $urls = array_filter($urls);
 
         $urlsChunks = array_chunk($urls, self::URL_CHUNK_LIMIT);
         foreach ($urlsChunks as $urls) {
